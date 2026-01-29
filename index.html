@@ -253,13 +253,9 @@
                     const redditDelta = prev ? d.reddit_total - prev.reddit_total : 0;
                     const starsDelta = prev ? d.github_stars - prev.github_stars : 0;
                     
-                    const time = new Date(d.timestamp).toLocaleTimeString('zh-TW', { 
-                        hour: '2-digit', minute: '2-digit' 
-                    });
-                    
                     tbody.innerHTML += `
                         <tr>
-                            <td>${time}</td>
+                            <td>${d.time_local || d.timestamp}</td>
                             <td>${d.reddit_total.toLocaleString()}</td>
                             <td class="${redditDelta >= 0 ? 'positive' : 'negative'}">${redditDelta > 0 ? '+' : ''}${redditDelta}</td>
                             <td>${d.github_stars.toLocaleString()}</td>
