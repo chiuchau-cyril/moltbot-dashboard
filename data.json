@@ -1,41 +1,41 @@
 {
-  "timestamp": "2026-01-29T07:46:49Z",
-  "timestamp_local": "2026-01-29 15:46:49",
-  "data_points": 26,
+  "timestamp": "2026-01-29T07:57:38Z",
+  "timestamp_local": "2026-01-29 15:57:38",
+  "data_points": 27,
   "reddit": {
-    "total_subscribers": 3346,
-    "delta_subscribers": 361,
+    "total_subscribers": 3354,
+    "delta_subscribers": 369,
     "total_active": 0,
-    "total_posts_24h": 72,
+    "total_posts_24h": 71,
     "total_comments": 451,
-    "total_upvotes": 170,
+    "total_upvotes": 168,
     "subreddits": [
       {
         "name": "r/clawdbot",
         "key": "clawdbot",
-        "subscribers": 2548,
+        "subscribers": 2549,
         "active": 0,
-        "posts_24h": 35,
+        "posts_24h": 34,
         "comments": 380,
         "avg_score": 2,
-        "total_upvotes": 70,
+        "total_upvotes": 69,
         "top_score": 15
       },
       {
         "name": "r/moltbot",
         "key": "moltbot",
-        "subscribers": 480,
+        "subscribers": 484,
         "active": 0,
         "posts_24h": 27,
         "comments": 49,
         "avg_score": 1,
-        "total_upvotes": 35,
-        "top_score": 3
+        "total_upvotes": 37,
+        "top_score": 5
       },
       {
         "name": "r/moltbothub",
         "key": "moltbothub",
-        "subscribers": 56,
+        "subscribers": 57,
         "active": 0,
         "posts_24h": 4,
         "comments": 5,
@@ -46,7 +46,7 @@
       {
         "name": "r/moltbothq",
         "key": "moltbothq",
-        "subscribers": 31,
+        "subscribers": 32,
         "active": 0,
         "posts_24h": 0,
         "comments": 1,
@@ -57,21 +57,21 @@
       {
         "name": "r/moltbotcommunity",
         "key": "moltbotcommunity",
-        "subscribers": 231,
+        "subscribers": 232,
         "active": 0,
         "posts_24h": 6,
         "comments": 16,
         "avg_score": 3,
-        "total_upvotes": 49,
+        "total_upvotes": 46,
         "top_score": 8
       }
     ]
   },
   "github": {
-    "stars": 94776,
-    "stars_delta": 3702,
-    "forks": 13026,
-    "forks_delta": 581,
-    "open_issues": 1186
+    "stars": 94948,
+    "stars_delta": 3874,
+    "forks": 13055,
+    "forks_delta": 610,
+    "open_issues": 1190
   }
 }
