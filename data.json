@@ -1,0 +1,46 @@
+{
+  "timestamp": "2026-01-29T03:41:10Z",
+  "timestamp_local": "2026-01-29 11:41:10",
+  "data_points": 11,
+  "reddit": {
+    "total": 3219,
+    "delta": 234,
+    "subreddits": [
+      {
+        "name": "r/clawdbot",
+        "count": 2484
+      },
+      {
+        "name": "r/moltbot",
+        "count": 433
+      },
+      {
+        "name": "r/MoltBotHub",
+        "count": 52
+      },
+      {
+        "name": "r/moltbotHQ",
+        "count": 31
+      },
+      {
+        "name": "r/MoltbotCommunity",
+        "count": 219
+      }
+    ],
+    "new_posts_24h": 26
+  },
+  "github": {
+    "stars": 91385,
+    "stars_delta": 311,
+    "forks": 12499,
+    "forks_delta": 54,
+    "open_issues": 1100
+  },
+  "hardware": {
+    "rpi_total": 40,
+    "rpi_pi5": 17,
+    "rpi_pi4": 2,
+    "rpi_zero": 1,
+    "mac_mini": "available"
+  }
+}

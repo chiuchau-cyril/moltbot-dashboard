@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🦞 Moltbot Dashboard</title>
+    <meta http-equiv="refresh" content="60">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #eee;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        h1 { text-align: center; margin-bottom: 10px; font-size: 2.5em; }
+        .subtitle { text-align: center; color: #888; margin-bottom: 30px; }
+        .update-time { text-align: center; color: #4ecdc4; margin-bottom: 20px; font-size: 0.9em; }
+        
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        
+        .card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .card h2 { font-size: 1.1em; color: #888; margin-bottom: 15px; }
+        .card .value { font-size: 2.5em; font-weight: bold; }
+        .card .delta { font-size: 1em; margin-top: 5px; }
+        .delta.positive { color: #4ecdc4; }
+        .delta.negative { color: #ff6b6b; }
+        
+        .chart-container { 
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .chart-container img { 
+            width: 100%; 
+            border-radius: 8px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        th { color: #888; font-weight: normal; }
+        
+        .status-ok { color: #4ecdc4; }
+        .status-warn { color: #ffd93d; }
+        
+        footer {
+            text-align: center;
+            color: #666;
+            margin-top: 40px;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🦞 Moltbot Dashboard</h1>
+        <p class="subtitle">Real-time monitoring of moltbot popularity</p>
+        <p class="update-time" id="updateTime">Loading...</p>
+        
+        <div class="grid">
+            <div class="card">
+                <h2>📊 Reddit Total</h2>
+                <div class="value" id="redditTotal">-</div>
+                <div class="delta positive" id="redditDelta">-</div>
+            </div>
+            <div class="card">
+                <h2>⭐ GitHub Stars</h2>
+                <div class="value" id="githubStars">-</div>
+                <div class="delta positive" id="starsDelta">-</div>
+            </div>
+            <div class="card">
+                <h2>🍴 GitHub Forks</h2>
+                <div class="value" id="githubForks">-</div>
+                <div class="delta positive" id="forksDelta">-</div>
+            </div>
+            <div class="card">
+                <h2>🍓 RPi Stock Alerts</h2>
+                <div class="value" id="rpiStock">-</div>
+                <div class="delta" id="rpiStatus">-</div>
+            </div>
+        </div>
+        
+        <div class="chart-container">
+            <h2 style="color: #888; margin-bottom: 15px;">📈 Trend Chart</h2>
+            <img src="chart.png" alt="Trend Chart" id="chart">
+        </div>
+        
+        <div class="grid">
+            <div class="card">
+                <h2>Reddit Subreddits</h2>
+                <table id="redditTable">
+                    <tr><th>Subreddit</th><th>Members</th></tr>
+                </table>
+            </div>
+            <div class="card">
+                <h2>Hardware Stock</h2>
+                <table id="hardwareTable">
+                    <tr><th>Item</th><th>Status</th></tr>
+                </table>
+            </div>
+        </div>
+        
+        <footer>
+            Auto-refresh every 60 seconds | Data collected every 10 minutes
+        </footer>
+    </div>
+    
+    <script>
+        async function loadData() {
+            try {
+                const response = await fetch('data.json?' + Date.now());
+                const data = await response.json();
+                
+                document.getElementById('updateTime').textContent = 
+                    `Last updated: ${data.timestamp_local} | Data points: ${data.data_points}`;
+                
+                // Reddit
+                document.getElementById('redditTotal').textContent = 
+                    data.reddit.total.toLocaleString();
+                document.getElementById('redditDelta').textContent = 
+                    `${data.reddit.delta >= 0 ? '+' : ''}${data.reddit.delta.toLocaleString()} since start`;
+                document.getElementById('redditDelta').className = 
+                    'delta ' + (data.reddit.delta >= 0 ? 'positive' : 'negative');
+                
+                // GitHub
+                document.getElementById('githubStars').textContent = 
+                    data.github.stars.toLocaleString();
+                document.getElementById('starsDelta').textContent = 
+                    `${data.github.stars_delta >= 0 ? '+' : ''}${data.github.stars_delta.toLocaleString()} since start`;
+                
+                document.getElementById('githubForks').textContent = 
+                    data.github.forks.toLocaleString();
+                document.getElementById('forksDelta').textContent = 
+                    `${data.github.forks_delta >= 0 ? '+' : ''}${data.github.forks_delta.toLocaleString()} since start`;
+                
+                // RPi
+                document.getElementById('rpiStock').textContent = data.hardware.rpi_total;
+                document.getElementById('rpiStatus').textContent = 
+                    `Pi5: ${data.hardware.rpi_pi5} | Pi4: ${data.hardware.rpi_pi4}`;
+                
+                // Reddit table
+                const redditTable = document.getElementById('redditTable');
+                redditTable.innerHTML = '<tr><th>Subreddit</th><th>Members</th></tr>';
+                data.reddit.subreddits.forEach(sub => {
+                    redditTable.innerHTML += `<tr><td>${sub.name}</td><td>${sub.count.toLocaleString()}</td></tr>`;
+                });
+                
+                // Hardware table
+                const hwTable = document.getElementById('hardwareTable');
+                hwTable.innerHTML = '<tr><th>Item</th><th>Status</th></tr>';
+                hwTable.innerHTML += `<tr><td>Raspberry Pi 5</td><td>${data.hardware.rpi_pi5} alerts</td></tr>`;
+                hwTable.innerHTML += `<tr><td>Raspberry Pi 4</td><td>${data.hardware.rpi_pi4} alerts</td></tr>`;
+                hwTable.innerHTML += `<tr><td>Pi Zero</td><td>${data.hardware.rpi_zero} alerts</td></tr>`;
+                hwTable.innerHTML += `<tr><td>Mac mini</td><td class="status-ok">${data.hardware.mac_mini}</td></tr>`;
+                
+                // Refresh chart
+                document.getElementById('chart').src = 'chart.png?' + Date.now();
+                
+            } catch (e) {
+                console.error('Failed to load data:', e);
+            }
+        }
+        
+        loadData();
+        setInterval(loadData, 60000);
+    </script>
+</body>
+</html>
