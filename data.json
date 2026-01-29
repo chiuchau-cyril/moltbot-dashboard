@@ -1,36 +1,36 @@
 {
-  "timestamp": "2026-01-29T21:41:18Z",
-  "timestamp_local": "2026-01-30 05:41:18",
-  "data_points": 102,
+  "timestamp": "2026-01-29T21:52:10Z",
+  "timestamp_local": "2026-01-30 05:52:10",
+  "data_points": 103,
   "reddit": {
-    "total_subscribers": 3894,
-    "delta_subscribers": 909,
+    "total_subscribers": 3904,
+    "delta_subscribers": 919,
     "total_active": 0,
-    "total_posts_24h": 76,
-    "total_comments": 450,
-    "total_upvotes": 221,
+    "total_posts_24h": 77,
+    "total_comments": 453,
+    "total_upvotes": 222,
     "subreddits": [
       {
         "name": "r/clawdbot",
         "key": "clawdbot",
-        "subscribers": 2811,
+        "subscribers": 2817,
         "active": 0,
-        "posts_24h": 37,
-        "comments": 357,
+        "posts_24h": 38,
+        "comments": 358,
         "avg_score": 3,
         "total_upvotes": 89,
-        "top_score": 12
+        "top_score": 13
       },
       {
         "name": "r/moltbot",
         "key": "moltbot",
-        "subscribers": 703,
+        "subscribers": 705,
         "active": 0,
         "posts_24h": 28,
-        "comments": 67,
-        "avg_score": 2,
-        "total_upvotes": 50,
-        "top_score": 7
+        "comments": 68,
+        "avg_score": 1,
+        "total_upvotes": 48,
+        "top_score": 6
       },
       {
         "name": "r/moltbothub",
@@ -57,21 +57,21 @@
       {
         "name": "r/moltbotcommunity",
         "key": "moltbotcommunity",
-        "subscribers": 274,
+        "subscribers": 276,
         "active": 0,
         "posts_24h": 9,
-        "comments": 20,
-        "avg_score": 2,
-        "total_upvotes": 65,
-        "top_score": 10
+        "comments": 21,
+        "avg_score": 3,
+        "total_upvotes": 68,
+        "top_score": 9
       }
     ]
   },
   "github": {
-    "stars": 102625,
-    "stars_delta": 11551,
-    "forks": 14326,
-    "forks_delta": 1881,
-    "open_issues": 1168
+    "stars": 102673,
+    "stars_delta": 11599,
+    "forks": 14329,
+    "forks_delta": 1884,
+    "open_issues": 1173
   }
 }
