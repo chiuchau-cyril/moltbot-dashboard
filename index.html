@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🦞 Moltbot Dashboard</title>
+    <title>🦞 Moltbot Analytics</title>
     <meta http-equiv="refresh" content="120">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
@@ -11,153 +11,213 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background: #0f0f1a;
             color: #eee;
             min-height: 100vh;
-            padding: 20px;
+            padding: 15px;
         }
-        .container { max-width: 1600px; margin: 0 auto; }
-        h1 { text-align: center; margin-bottom: 10px; font-size: 2.2em; }
-        .subtitle { text-align: center; color: #888; margin-bottom: 20px; }
-        .update-time { text-align: center; color: #4ecdc4; margin-bottom: 20px; font-size: 0.9em; }
+        .container { max-width: 1800px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 20px; }
+        header h1 { font-size: 1.8em; margin-bottom: 5px; }
+        header .meta { color: #666; font-size: 0.85em; }
+        header .meta span { color: #4ecdc4; }
         
-        .summary-grid { 
+        /* Overview Cards */
+        .overview { 
             display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
-            gap: 10px; 
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            gap: 12px; 
             margin-bottom: 20px; 
         }
-        .summary-card {
-            background: rgba(255,255,255,0.05);
-            border-radius: 10px;
-            padding: 12px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.1);
+        .stat-card {
+            background: linear-gradient(135deg, rgba(30,144,255,0.15), rgba(30,144,255,0.05));
+            border: 1px solid rgba(30,144,255,0.3);
+            border-radius: 12px;
+            padding: 15px;
         }
-        .summary-card h3 { font-size: 0.75em; color: #888; margin-bottom: 5px; }
-        .summary-card .value { font-size: 1.4em; font-weight: bold; }
-        .summary-card .delta { font-size: 0.8em; color: #4ecdc4; }
+        .stat-card.github { 
+            background: linear-gradient(135deg, rgba(46,204,113,0.15), rgba(46,204,113,0.05));
+            border-color: rgba(46,204,113,0.3);
+        }
+        .stat-card .label { font-size: 0.75em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-card .value { font-size: 2em; font-weight: bold; margin: 5px 0; }
+        .stat-card .change { font-size: 0.9em; }
+        .stat-card .change.up { color: #4ecdc4; }
+        .stat-card .change.down { color: #ff6b6b; }
+        .stat-card .rate { font-size: 0.8em; color: #888; margin-top: 5px; }
         
-        .charts-grid {
+        /* Subreddit Analysis Grid */
+        .sub-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .sub-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 15px;
+        }
+        .sub-card .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .sub-card .name { font-size: 1.1em; font-weight: bold; }
+        .sub-card .rank { 
+            font-size: 0.75em; 
+            padding: 3px 8px; 
+            border-radius: 10px; 
+            background: rgba(255,255,255,0.1);
+        }
+        .sub-card .rank.gold { background: rgba(255,215,0,0.3); color: #ffd700; }
+        .sub-card .rank.silver { background: rgba(192,192,192,0.3); color: #c0c0c0; }
+        .sub-card .rank.bronze { background: rgba(205,127,50,0.3); color: #cd7f32; }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .metric {
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            padding: 10px;
+        }
+        .metric .label { font-size: 0.7em; color: #666; margin-bottom: 3px; }
+        .metric .val { font-size: 1.2em; font-weight: bold; }
+        .metric .delta { font-size: 0.75em; }
+        .metric .delta.up { color: #4ecdc4; }
+        .metric .delta.down { color: #ff6b6b; }
+        
+        .mini-chart { height: 60px; margin-top: 10px; }
+        
+        /* Comparison Charts */
+        .charts-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
             gap: 15px;
             margin-bottom: 20px;
         }
         .chart-card {
-            background: rgba(255,255,255,0.05);
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
             border-radius: 12px;
             padding: 15px;
-            border: 1px solid rgba(255,255,255,0.1);
         }
-        .chart-card h2 { font-size: 0.95em; color: #888; margin-bottom: 12px; }
-        .chart-container { position: relative; height: 260px; }
+        .chart-card h3 { font-size: 0.9em; color: #888; margin-bottom: 12px; }
+        .chart-container { height: 250px; }
         
-        .table-card {
-            background: rgba(255,255,255,0.05);
+        /* Rankings Table */
+        .rankings {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
             border-radius: 12px;
             padding: 15px;
-            border: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             overflow-x: auto;
         }
-        .table-card h2 { font-size: 0.95em; color: #888; margin-bottom: 12px; }
-        
-        table { width: 100%; border-collapse: collapse; font-size: 0.8em; }
-        th, td { padding: 6px 8px; text-align: right; border-bottom: 1px solid rgba(255,255,255,0.08); }
-        th { color: #666; font-weight: normal; font-size: 0.9em; }
+        .rankings h3 { font-size: 0.9em; color: #888; margin-bottom: 12px; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85em; }
+        th, td { padding: 10px 12px; text-align: right; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        th { color: #666; font-weight: 500; font-size: 0.8em; text-transform: uppercase; }
         th:first-child, td:first-child { text-align: left; }
-        tr:hover { background: rgba(255,255,255,0.03); }
-        .positive { color: #4ecdc4; }
-        .negative { color: #ff6b6b; }
-        
-        footer { text-align: center; color: #555; margin-top: 25px; font-size: 0.8em; }
-        footer a { color: #4ecdc4; }
-        
-        @media (max-width: 500px) {
-            .charts-grid { grid-template-columns: 1fr; }
-            .chart-container { height: 200px; }
+        tr:hover { background: rgba(255,255,255,0.02); }
+        .highlight { color: #4ecdc4; font-weight: bold; }
+        .bar-cell { position: relative; }
+        .bar { 
+            position: absolute; 
+            left: 0; top: 50%; 
+            transform: translateY(-50%);
+            height: 6px; 
+            border-radius: 3px; 
+            opacity: 0.5;
         }
+        
+        footer { text-align: center; color: #444; font-size: 0.75em; padding: 20px; }
+        footer a { color: #4ecdc4; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🦞 Moltbot Dashboard</h1>
-        <p class="subtitle">Reddit & GitHub Popularity Tracking</p>
-        <p class="update-time" id="updateTime">Loading...</p>
+        <header>
+            <h1>🦞 Moltbot Analytics Dashboard</h1>
+            <p class="meta">Last updated: <span id="updateTime">-</span> | <span id="dataPoints">-</span> data points</p>
+        </header>
         
-        <!-- Summary Cards -->
-        <div class="summary-grid">
-            <div class="summary-card">
-                <h3>👥 Reddit Subs</h3>
-                <div class="value" id="redditTotal">-</div>
-                <div class="delta" id="redditDelta">-</div>
+        <!-- Overview Stats -->
+        <div class="overview">
+            <div class="stat-card">
+                <div class="label">Total Reddit Subscribers</div>
+                <div class="value" id="totalSubs">-</div>
+                <div class="change up" id="totalSubsChange">-</div>
+                <div class="rate" id="totalSubsRate">-</div>
             </div>
-            <div class="summary-card">
-                <h3>🟢 Active Now</h3>
-                <div class="value" id="redditActive">-</div>
-                <div class="delta">online</div>
+            <div class="stat-card">
+                <div class="label">24h New Posts</div>
+                <div class="value" id="totalPosts">-</div>
+                <div class="change" id="postsActivity">across all subs</div>
             </div>
-            <div class="summary-card">
-                <h3>📝 Posts/24h</h3>
-                <div class="value" id="redditPosts">-</div>
-                <div class="delta">new posts</div>
+            <div class="stat-card">
+                <div class="label">Total Engagement</div>
+                <div class="value" id="totalEngagement">-</div>
+                <div class="change" id="engagementDetail">comments + upvotes</div>
             </div>
-            <div class="summary-card">
-                <h3>💬 Comments</h3>
-                <div class="value" id="redditComments">-</div>
-                <div class="delta">on recent</div>
+            <div class="stat-card github">
+                <div class="label">GitHub Stars</div>
+                <div class="value" id="ghStars">-</div>
+                <div class="change up" id="ghStarsChange">-</div>
+                <div class="rate" id="ghStarsRate">-</div>
             </div>
-            <div class="summary-card">
-                <h3>👍 Upvotes</h3>
-                <div class="value" id="redditUpvotes">-</div>
-                <div class="delta">on hot posts</div>
-            </div>
-            <div class="summary-card">
-                <h3>⭐ Stars</h3>
-                <div class="value" id="githubStars">-</div>
-                <div class="delta" id="starsDelta">-</div>
-            </div>
-            <div class="summary-card">
-                <h3>🍴 Forks</h3>
-                <div class="value" id="githubForks">-</div>
-                <div class="delta" id="forksDelta">-</div>
+            <div class="stat-card github">
+                <div class="label">GitHub Forks</div>
+                <div class="value" id="ghForks">-</div>
+                <div class="change up" id="ghForksChange">-</div>
             </div>
         </div>
         
-        <!-- Charts -->
-        <div class="charts-grid">
+        <!-- Per-Subreddit Cards -->
+        <div class="sub-grid" id="subCards"></div>
+        
+        <!-- Comparison Charts -->
+        <div class="charts-section">
             <div class="chart-card">
-                <h2>📈 Subscribers by Subreddit</h2>
-                <div class="chart-container"><canvas id="subsChart"></canvas></div>
+                <h3>📈 Subscriber Growth Trend</h3>
+                <div class="chart-container"><canvas id="growthChart"></canvas></div>
             </div>
             <div class="chart-card">
-                <h2>🔥 Engagement (Active + Posts + Upvotes)</h2>
+                <h3>🔥 Engagement Trend (Posts + Comments + Upvotes)</h3>
                 <div class="chart-container"><canvas id="engagementChart"></canvas></div>
             </div>
             <div class="chart-card">
-                <h2>⭐ GitHub Stars</h2>
+                <h3>⭐ GitHub Stars Growth</h3>
                 <div class="chart-container"><canvas id="starsChart"></canvas></div>
             </div>
             <div class="chart-card">
-                <h2>📊 Reddit Total Growth</h2>
-                <div class="chart-container"><canvas id="totalChart"></canvas></div>
+                <h3>📊 Subreddit Size Comparison</h3>
+                <div class="chart-container"><canvas id="compareChart"></canvas></div>
             </div>
         </div>
         
-        <!-- Subreddit Comparison Table -->
-        <div class="table-card">
-            <h2>📋 Subreddit Comparison (Latest)</h2>
-            <table id="subTable">
+        <!-- Rankings Table -->
+        <div class="rankings">
+            <h3>🏆 Subreddit Rankings & Metrics</h3>
+            <table id="rankTable">
                 <thead>
                     <tr>
                         <th>Subreddit</th>
                         <th>Subscribers</th>
+                        <th>Growth</th>
+                        <th>Growth %</th>
                         <th>Active</th>
                         <th>Posts/24h</th>
                         <th>Comments</th>
-                        <th>Avg Score</th>
-                        <th>Total Upvotes</th>
+                        <th>Upvotes</th>
+                        <th>Engagement Rate</th>
                         <th>Top Post</th>
                     </tr>
                 </thead>
@@ -165,28 +225,8 @@
             </table>
         </div>
         
-        <!-- History Table -->
-        <div class="table-card">
-            <h2>📋 Historical Data</h2>
-            <table id="historyTable">
-                <thead>
-                    <tr>
-                        <th>Time</th>
-                        <th>Subs</th>
-                        <th>Active</th>
-                        <th>Posts</th>
-                        <th>Upvotes</th>
-                        <th>Stars</th>
-                        <th>Δ Stars</th>
-                        <th>Forks</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-        
         <footer>
-            Auto-refresh 2min | Data every 10min | 
+            Auto-refresh 2min | Data collected every 10min | 
             <a href="https://github.com/chiuchau-cyril/moltbot-dashboard">GitHub</a>
         </footer>
     </div>
@@ -197,17 +237,20 @@
             moltbot: '#FF6B6B',
             moltbothub: '#4ECDC4',
             moltbothq: '#A78BFA',
-            moltbotcommunity: '#FBBF24',
-            stars: '#2ECC71',
-            total: '#1E90FF',
-            active: '#FF6B6B',
-            posts: '#4ECDC4',
-            upvotes: '#FBBF24'
+            moltbotcommunity: '#FBBF24'
+        };
+        const subNames = {
+            clawdbot: 'r/clawdbot',
+            moltbot: 'r/moltbot',
+            moltbothub: 'r/MoltBotHub',
+            moltbothq: 'r/moltbotHQ',
+            moltbotcommunity: 'r/MoltbotCommunity'
         };
         
-        let subsChart, engagementChart, starsChart, totalChart;
+        let growthChart, engagementChart, starsChart, compareChart;
+        const miniCharts = {};
         
-        function createChart(ctx, datasets, options = {}) {
+        function createLineChart(ctx, datasets, options = {}) {
             return new Chart(ctx, {
                 type: 'line',
                 data: { datasets },
@@ -216,137 +259,231 @@
                     maintainAspectRatio: false,
                     interaction: { intersect: false, mode: 'index' },
                     plugins: {
-                        legend: { display: true, position: 'top', labels: { color: '#888', boxWidth: 10, padding: 8, font: { size: 10 } } },
-                        tooltip: { backgroundColor: 'rgba(0,0,0,0.8)' }
+                        legend: { display: true, position: 'top', labels: { color: '#888', boxWidth: 10, font: { size: 10 } } }
                     },
                     scales: {
-                        x: {
-                            type: 'time',
-                            time: { unit: 'minute', displayFormats: { minute: 'HH:mm' } },
-                            grid: { color: 'rgba(255,255,255,0.05)' },
-                            ticks: { color: '#666', font: { size: 10 } }
-                        },
-                        y: {
-                            grid: { color: 'rgba(255,255,255,0.05)' },
-                            ticks: { color: '#666', font: { size: 10 } }
-                        },
-                        ...options.scales
+                        x: { type: 'time', time: { unit: 'minute', displayFormats: { minute: 'HH:mm' } }, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#666', font: { size: 9 } } },
+                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#666', font: { size: 9 } }, ...options.y }
                     }
                 }
             });
         }
         
         function initCharts() {
-            subsChart = createChart(document.getElementById('subsChart'), [
-                { label: 'r/clawdbot', borderColor: colors.clawdbot, tension: 0.3, pointRadius: 2, borderWidth: 2 },
-                { label: 'r/moltbot', borderColor: colors.moltbot, tension: 0.3, pointRadius: 2, borderWidth: 2 },
-                { label: 'r/MoltBotHub', borderColor: colors.moltbothub, tension: 0.3, pointRadius: 2, borderWidth: 2 },
-                { label: 'r/moltbotHQ', borderColor: colors.moltbothq, tension: 0.3, pointRadius: 2, borderWidth: 2 },
-                { label: 'r/Community', borderColor: colors.moltbotcommunity, tension: 0.3, pointRadius: 2, borderWidth: 2 }
+            growthChart = createLineChart(document.getElementById('growthChart'), 
+                Object.keys(colors).map(k => ({ label: subNames[k], borderColor: colors[k], tension: 0.3, pointRadius: 2, borderWidth: 2 }))
+            );
+            
+            engagementChart = createLineChart(document.getElementById('engagementChart'), [
+                { label: 'Posts', borderColor: '#4ECDC4', tension: 0.3, pointRadius: 2, borderWidth: 2 },
+                { label: 'Comments', borderColor: '#FF6B6B', tension: 0.3, pointRadius: 2, borderWidth: 2 },
+                { label: 'Upvotes', borderColor: '#FBBF24', tension: 0.3, pointRadius: 2, borderWidth: 2 }
             ]);
             
-            engagementChart = createChart(document.getElementById('engagementChart'), [
-                { label: 'Active', borderColor: colors.active, tension: 0.3, pointRadius: 2, borderWidth: 2 },
-                { label: 'Posts/24h', borderColor: colors.posts, tension: 0.3, pointRadius: 2, borderWidth: 2 },
-                { label: 'Upvotes', borderColor: colors.upvotes, tension: 0.3, pointRadius: 2, borderWidth: 2, yAxisID: 'y1' }
-            ], {
-                scales: {
-                    y1: { position: 'right', grid: { drawOnChartArea: false }, ticks: { color: '#666', font: { size: 10 } } }
+            starsChart = createLineChart(document.getElementById('starsChart'), [
+                { label: 'Stars', borderColor: '#2ECC71', backgroundColor: '#2ECC7133', fill: true, tension: 0.3, pointRadius: 2, borderWidth: 2 }
+            ]);
+            
+            compareChart = new Chart(document.getElementById('compareChart'), {
+                type: 'bar',
+                data: {
+                    labels: Object.values(subNames),
+                    datasets: [
+                        { label: 'Subscribers', backgroundColor: Object.values(colors).map(c => c + '99') }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#666' } },
+                        y: { grid: { display: false }, ticks: { color: '#888' } }
+                    }
                 }
             });
+        }
+        
+        function calcGrowthRate(history, field) {
+            if (history.length < 2) return { total: 0, perHour: 0, percent: 0 };
+            const first = history[0][field] || 0;
+            const last = history[history.length - 1][field] || 0;
+            const total = last - first;
+            const hours = (new Date(history[history.length-1].timestamp) - new Date(history[0].timestamp)) / 3600000;
+            return {
+                total,
+                perHour: hours > 0 ? (total / hours).toFixed(1) : 0,
+                percent: first > 0 ? ((total / first) * 100).toFixed(2) : 0
+            };
+        }
+        
+        function createSubCard(sub, data, history, rank) {
+            const firstData = history.find(h => h[`${sub.key}_subs`] > 0) || {};
+            const growth = (data.subscribers || 0) - (firstData[`${sub.key}_subs`] || data.subscribers || 0);
+            const growthPct = firstData[`${sub.key}_subs`] ? ((growth / firstData[`${sub.key}_subs`]) * 100).toFixed(2) : 0;
+            const engagementRate = data.subscribers > 0 ? ((data.comments + data.total_upvotes) / data.subscribers * 100).toFixed(2) : 0;
             
-            starsChart = createChart(document.getElementById('starsChart'), [
-                { label: 'Stars', borderColor: colors.stars, backgroundColor: colors.stars + '22', fill: true, tension: 0.3, pointRadius: 2, borderWidth: 2 }
-            ]);
+            const rankClass = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : '';
             
-            totalChart = createChart(document.getElementById('totalChart'), [
-                { label: 'Total Subs', borderColor: colors.total, backgroundColor: colors.total + '22', fill: true, tension: 0.3, pointRadius: 2, borderWidth: 2 }
-            ]);
+            return `
+                <div class="sub-card" style="border-left: 3px solid ${colors[sub.key]}">
+                    <div class="header">
+                        <span class="name" style="color: ${colors[sub.key]}">${sub.name}</span>
+                        <span class="rank ${rankClass}">#${rank} by size</span>
+                    </div>
+                    <div class="metrics-grid">
+                        <div class="metric">
+                            <div class="label">Subscribers</div>
+                            <div class="val">${data.subscribers.toLocaleString()}</div>
+                            <div class="delta ${growth >= 0 ? 'up' : 'down'}">${growth >= 0 ? '+' : ''}${growth} (${growthPct}%)</div>
+                        </div>
+                        <div class="metric">
+                            <div class="label">Active Now</div>
+                            <div class="val">${data.active || 0}</div>
+                            <div class="delta">online users</div>
+                        </div>
+                        <div class="metric">
+                            <div class="label">Posts (24h)</div>
+                            <div class="val">${data.posts_24h || 0}</div>
+                            <div class="delta">new posts</div>
+                        </div>
+                        <div class="metric">
+                            <div class="label">Comments</div>
+                            <div class="val">${data.comments || 0}</div>
+                            <div class="delta">on recent posts</div>
+                        </div>
+                        <div class="metric">
+                            <div class="label">Upvotes</div>
+                            <div class="val">${data.total_upvotes || 0}</div>
+                            <div class="delta">avg: ${data.avg_score || 0}/post</div>
+                        </div>
+                        <div class="metric">
+                            <div class="label">Engagement Rate</div>
+                            <div class="val">${engagementRate}%</div>
+                            <div class="delta">(comments+upvotes)/subs</div>
+                        </div>
+                    </div>
+                    <div class="mini-chart"><canvas id="mini-${sub.key}"></canvas></div>
+                </div>
+            `;
+        }
+        
+        function createMiniChart(key, history) {
+            const ctx = document.getElementById(`mini-${key}`);
+            if (!ctx) return;
+            
+            if (miniCharts[key]) miniCharts[key].destroy();
+            
+            miniCharts[key] = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        data: history.map(h => ({ x: new Date(h.timestamp), y: h[`${key}_subs`] || 0 })),
+                        borderColor: colors[key],
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        tension: 0.3,
+                        fill: true,
+                        backgroundColor: colors[key] + '22'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                    scales: {
+                        x: { type: 'time', display: false },
+                        y: { display: false }
+                    }
+                }
+            });
         }
         
         async function loadData() {
             try {
-                const [summaryRes, historyRes] = await Promise.all([
+                const [dataRes, histRes] = await Promise.all([
                     fetch('data.json?' + Date.now()),
                     fetch('history.json?' + Date.now())
                 ]);
+                const data = await dataRes.json();
+                const history = await histRes.json();
                 
-                const data = await summaryRes.json();
-                const history = await historyRes.json();
+                // Header
+                document.getElementById('updateTime').textContent = data.timestamp_local;
+                document.getElementById('dataPoints').textContent = history.length;
                 
-                document.getElementById('updateTime').textContent = 
-                    `Last: ${data.timestamp_local} | ${history.length} points`;
+                // Overview
+                const subGrowth = calcGrowthRate(history, 'reddit_total');
+                document.getElementById('totalSubs').textContent = data.reddit.total_subscribers.toLocaleString();
+                document.getElementById('totalSubsChange').textContent = `+${data.reddit.delta_subscribers.toLocaleString()} since start`;
+                document.getElementById('totalSubsRate').textContent = `~${subGrowth.perHour}/hour growth`;
                 
-                // Summary
-                document.getElementById('redditTotal').textContent = data.reddit.total_subscribers.toLocaleString();
-                document.getElementById('redditDelta').textContent = `+${data.reddit.delta_subscribers.toLocaleString()}`;
-                document.getElementById('redditActive').textContent = data.reddit.total_active.toLocaleString();
-                document.getElementById('redditPosts').textContent = data.reddit.total_posts_24h.toLocaleString();
-                document.getElementById('redditComments').textContent = data.reddit.total_comments.toLocaleString();
-                document.getElementById('redditUpvotes').textContent = data.reddit.total_upvotes.toLocaleString();
-                document.getElementById('githubStars').textContent = data.github.stars.toLocaleString();
-                document.getElementById('starsDelta').textContent = `+${data.github.stars_delta.toLocaleString()}`;
-                document.getElementById('githubForks').textContent = data.github.forks.toLocaleString();
-                document.getElementById('forksDelta').textContent = `+${data.github.forks_delta.toLocaleString()}`;
+                document.getElementById('totalPosts').textContent = data.reddit.total_posts_24h;
+                document.getElementById('totalEngagement').textContent = (data.reddit.total_comments + data.reddit.total_upvotes).toLocaleString();
+                document.getElementById('engagementDetail').textContent = `${data.reddit.total_comments} comments + ${data.reddit.total_upvotes} upvotes`;
                 
-                // Subreddit table
-                const subTbody = document.querySelector('#subTable tbody');
-                subTbody.innerHTML = '';
-                (data.reddit.subreddits || []).forEach(s => {
-                    subTbody.innerHTML += `
-                        <tr>
-                            <td>${s.name}</td>
-                            <td>${s.subscribers.toLocaleString()}</td>
-                            <td>${s.active}</td>
-                            <td>${s.posts_24h}</td>
-                            <td>${s.comments}</td>
-                            <td>${s.avg_score}</td>
-                            <td>${s.total_upvotes}</td>
-                            <td>${s.top_score}</td>
-                        </tr>
-                    `;
+                const starGrowth = calcGrowthRate(history, 'github_stars');
+                document.getElementById('ghStars').textContent = data.github.stars.toLocaleString();
+                document.getElementById('ghStarsChange').textContent = `+${data.github.stars_delta.toLocaleString()} since start`;
+                document.getElementById('ghStarsRate').textContent = `~${starGrowth.perHour}/hour growth`;
+                
+                document.getElementById('ghForks').textContent = data.github.forks.toLocaleString();
+                document.getElementById('ghForksChange').textContent = `+${data.github.forks_delta.toLocaleString()}`;
+                
+                // Sort subreddits by size for ranking
+                const sortedSubs = [...data.reddit.subreddits].sort((a, b) => b.subscribers - a.subscribers);
+                
+                // Sub cards
+                const cardsHtml = sortedSubs.map((sub, i) => createSubCard(sub, sub, history, i + 1)).join('');
+                document.getElementById('subCards').innerHTML = cardsHtml;
+                
+                // Create mini charts
+                sortedSubs.forEach(sub => createMiniChart(sub.key, history));
+                
+                // Update main charts
+                const keys = Object.keys(colors);
+                keys.forEach((k, i) => {
+                    growthChart.data.datasets[i].data = history.map(h => ({ x: new Date(h.timestamp), y: h[`${k}_subs`] || 0 }));
                 });
+                growthChart.update('none');
                 
-                // Charts
-                subsChart.data.datasets[0].data = history.map(d => ({ x: new Date(d.timestamp), y: d.clawdbot_subs || 0 }));
-                subsChart.data.datasets[1].data = history.map(d => ({ x: new Date(d.timestamp), y: d.moltbot_subs || 0 }));
-                subsChart.data.datasets[2].data = history.map(d => ({ x: new Date(d.timestamp), y: d.moltbothub_subs || 0 }));
-                subsChart.data.datasets[3].data = history.map(d => ({ x: new Date(d.timestamp), y: d.moltbothq_subs || 0 }));
-                subsChart.data.datasets[4].data = history.map(d => ({ x: new Date(d.timestamp), y: d.moltbotcommunity_subs || 0 }));
-                subsChart.update('none');
-                
-                engagementChart.data.datasets[0].data = history.map(d => ({ x: new Date(d.timestamp), y: d.reddit_active || 0 }));
-                engagementChart.data.datasets[1].data = history.map(d => ({ x: new Date(d.timestamp), y: d.reddit_posts || 0 }));
-                engagementChart.data.datasets[2].data = history.map(d => ({ x: new Date(d.timestamp), y: d.reddit_upvotes || 0 }));
+                engagementChart.data.datasets[0].data = history.map(h => ({ x: new Date(h.timestamp), y: h.reddit_posts || 0 }));
+                engagementChart.data.datasets[1].data = history.map(h => ({ x: new Date(h.timestamp), y: h.reddit_comments || 0 }));
+                engagementChart.data.datasets[2].data = history.map(h => ({ x: new Date(h.timestamp), y: h.reddit_upvotes || 0 }));
                 engagementChart.update('none');
                 
-                starsChart.data.datasets[0].data = history.map(d => ({ x: new Date(d.timestamp), y: d.github_stars }));
+                starsChart.data.datasets[0].data = history.map(h => ({ x: new Date(h.timestamp), y: h.github_stars }));
                 starsChart.update('none');
                 
-                totalChart.data.datasets[0].data = history.map(d => ({ x: new Date(d.timestamp), y: d.reddit_total }));
-                totalChart.update('none');
+                compareChart.data.datasets[0].data = sortedSubs.map(s => s.subscribers);
+                compareChart.data.labels = sortedSubs.map(s => s.name);
+                compareChart.data.datasets[0].backgroundColor = sortedSubs.map(s => colors[s.key] + '99');
+                compareChart.update('none');
                 
-                // History table
-                const histTbody = document.querySelector('#historyTable tbody');
-                histTbody.innerHTML = '';
-                for (let i = history.length - 1; i >= 0; i--) {
-                    const d = history[i];
-                    const prev = history[i - 1];
-                    const starsDelta = prev ? d.github_stars - prev.github_stars : 0;
+                // Rankings table
+                const tbody = document.querySelector('#rankTable tbody');
+                tbody.innerHTML = sortedSubs.map((sub, i) => {
+                    const firstData = history.find(h => h[`${sub.key}_subs`] > 0) || {};
+                    const growth = sub.subscribers - (firstData[`${sub.key}_subs`] || sub.subscribers);
+                    const growthPct = firstData[`${sub.key}_subs`] ? ((growth / firstData[`${sub.key}_subs`]) * 100).toFixed(2) : 0;
+                    const engRate = sub.subscribers > 0 ? ((sub.comments + sub.total_upvotes) / sub.subscribers * 100).toFixed(2) : 0;
                     
-                    histTbody.innerHTML += `
+                    return `
                         <tr>
-                            <td>${d.time_local}</td>
-                            <td>${d.reddit_total.toLocaleString()}</td>
-                            <td>${d.reddit_active || 0}</td>
-                            <td>${d.reddit_posts || 0}</td>
-                            <td>${d.reddit_upvotes || 0}</td>
-                            <td>${d.github_stars.toLocaleString()}</td>
-                            <td class="${starsDelta >= 0 ? 'positive' : 'negative'}">${starsDelta > 0 ? '+' : ''}${starsDelta}</td>
-                            <td>${d.github_forks.toLocaleString()}</td>
+                            <td style="color: ${colors[sub.key]}; font-weight: bold">${sub.name}</td>
+                            <td>${sub.subscribers.toLocaleString()}</td>
+                            <td class="${growth >= 0 ? 'highlight' : ''}">${growth >= 0 ? '+' : ''}${growth}</td>
+                            <td>${growthPct}%</td>
+                            <td>${sub.active}</td>
+                            <td>${sub.posts_24h}</td>
+                            <td>${sub.comments}</td>
+                            <td>${sub.total_upvotes}</td>
+                            <td>${engRate}%</td>
+                            <td>${sub.top_score}</td>
                         </tr>
                     `;
-                }
+                }).join('');
                 
             } catch (e) {
                 console.error('Error:', e);
