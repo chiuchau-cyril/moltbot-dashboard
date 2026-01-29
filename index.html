@@ -16,16 +16,16 @@
             min-height: 100vh;
             padding: 20px;
         }
-        .container { max-width: 1400px; margin: 0 auto; }
+        .container { max-width: 1600px; margin: 0 auto; }
         h1 { text-align: center; margin-bottom: 10px; font-size: 2.5em; }
         .subtitle { text-align: center; color: #888; margin-bottom: 30px; }
         .update-time { text-align: center; color: #4ecdc4; margin-bottom: 20px; font-size: 0.9em; }
         
         .summary-grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
-            gap: 15px; 
-            margin-bottom: 30px; 
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
+            gap: 12px; 
+            margin-bottom: 25px; 
         }
         .summary-card {
             background: rgba(255,255,255,0.05);
@@ -34,15 +34,15 @@
             text-align: center;
             border: 1px solid rgba(255,255,255,0.1);
         }
-        .summary-card h3 { font-size: 0.85em; color: #888; margin-bottom: 8px; }
-        .summary-card .value { font-size: 1.8em; font-weight: bold; }
-        .summary-card .delta { font-size: 0.9em; color: #4ecdc4; }
+        .summary-card h3 { font-size: 0.8em; color: #888; margin-bottom: 6px; }
+        .summary-card .value { font-size: 1.6em; font-weight: bold; }
+        .summary-card .delta { font-size: 0.85em; color: #4ecdc4; }
         
         .charts-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
             gap: 20px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
         .chart-card {
             background: rgba(255,255,255,0.05);
@@ -51,28 +51,26 @@
             border: 1px solid rgba(255,255,255,0.1);
         }
         .chart-card h2 { font-size: 1em; color: #888; margin-bottom: 15px; }
-        .chart-container { position: relative; height: 300px; }
+        .chart-container { position: relative; height: 280px; }
         
-        .data-table-container {
+        .tables-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        .table-card {
             background: rgba(255,255,255,0.05);
             border-radius: 16px;
             padding: 20px;
             border: 1px solid rgba(255,255,255,0.1);
             overflow-x: auto;
         }
-        .data-table-container h2 { font-size: 1em; color: #888; margin-bottom: 15px; }
+        .table-card h2 { font-size: 1em; color: #888; margin-bottom: 15px; }
         
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9em;
-        }
-        th, td {
-            padding: 10px 12px;
-            text-align: right;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        th { color: #888; font-weight: normal; text-align: right; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85em; }
+        th, td { padding: 8px 10px; text-align: right; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        th { color: #888; font-weight: normal; }
         th:first-child, td:first-child { text-align: left; }
         tr:hover { background: rgba(255,255,255,0.03); }
         .positive { color: #4ecdc4; }
@@ -81,14 +79,15 @@
         footer {
             text-align: center;
             color: #666;
-            margin-top: 40px;
+            margin-top: 30px;
             padding: 20px;
             font-size: 0.85em;
         }
+        footer a { color: #4ecdc4; }
         
-        @media (max-width: 700px) {
-            .charts-grid { grid-template-columns: 1fr; }
-            .chart-container { height: 250px; }
+        @media (max-width: 600px) {
+            .charts-grid, .tables-grid { grid-template-columns: 1fr; }
+            .chart-container { height: 220px; }
         }
     </style>
 </head>
@@ -98,6 +97,7 @@
         <p class="subtitle">Real-time popularity monitoring</p>
         <p class="update-time" id="updateTime">Loading...</p>
         
+        <!-- Summary Cards -->
         <div class="summary-grid">
             <div class="summary-card">
                 <h3>📊 Reddit Total</h3>
@@ -105,12 +105,22 @@
                 <div class="delta" id="redditDelta">-</div>
             </div>
             <div class="summary-card">
+                <h3>r/clawdbot</h3>
+                <div class="value" id="clawdbot">-</div>
+                <div class="delta" id="clawdbotDelta">-</div>
+            </div>
+            <div class="summary-card">
+                <h3>r/moltbot</h3>
+                <div class="value" id="moltbot">-</div>
+                <div class="delta" id="moltbotDelta">-</div>
+            </div>
+            <div class="summary-card">
                 <h3>⭐ GitHub Stars</h3>
                 <div class="value" id="githubStars">-</div>
                 <div class="delta" id="starsDelta">-</div>
             </div>
             <div class="summary-card">
-                <h3>🍴 GitHub Forks</h3>
+                <h3>🍴 Forks</h3>
                 <div class="value" id="githubForks">-</div>
                 <div class="delta" id="forksDelta">-</div>
             </div>
@@ -121,86 +131,138 @@
             </div>
         </div>
         
+        <!-- Charts -->
         <div class="charts-grid">
             <div class="chart-card">
-                <h2>Reddit Subscribers</h2>
+                <h2>📈 Reddit Subreddits Comparison</h2>
                 <div class="chart-container"><canvas id="redditChart"></canvas></div>
             </div>
             <div class="chart-card">
-                <h2>GitHub Stars</h2>
-                <div class="chart-container"><canvas id="starsChart"></canvas></div>
+                <h2>⭐ GitHub Stars & Forks</h2>
+                <div class="chart-container"><canvas id="githubChart"></canvas></div>
             </div>
         </div>
         
-        <div class="data-table-container">
-            <h2>📋 Historical Data</h2>
-            <table id="historyTable">
-                <thead>
-                    <tr>
-                        <th>Time</th>
-                        <th>Reddit</th>
-                        <th>Δ</th>
-                        <th>Stars</th>
-                        <th>Δ</th>
-                        <th>Forks</th>
-                        <th>Issues</th>
-                        <th>RPi</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+        <!-- Tables -->
+        <div class="tables-grid">
+            <div class="table-card">
+                <h2>📋 Reddit History</h2>
+                <table id="redditTable">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Total</th>
+                            <th>clawdbot</th>
+                            <th>moltbot</th>
+                            <th>Hub</th>
+                            <th>HQ</th>
+                            <th>Community</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="table-card">
+                <h2>📋 GitHub & Hardware History</h2>
+                <table id="githubTable">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Stars</th>
+                            <th>Δ</th>
+                            <th>Forks</th>
+                            <th>Issues</th>
+                            <th>RPi</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </div>
         
         <footer>
             Auto-refresh every 2 minutes | Data collected every 10 minutes<br>
-            <a href="https://github.com/chiuchau-cyril/moltbot-dashboard" style="color: #4ecdc4;">GitHub Repo</a>
+            <a href="https://github.com/chiuchau-cyril/moltbot-dashboard">GitHub Repo</a>
         </footer>
     </div>
     
     <script>
-        let redditChart, starsChart;
+        let redditChart, githubChart;
         
-        const chartOptions = {
-            responsive: true,
-            maintainAspectRatio: false,
-            interaction: { intersect: false, mode: 'index' },
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    backgroundColor: 'rgba(0,0,0,0.8)',
-                    titleColor: '#fff',
-                    bodyColor: '#fff',
-                }
-            },
-            scales: {
-                x: {
-                    type: 'time',
-                    time: { unit: 'minute', displayFormats: { minute: 'HH:mm' } },
-                    grid: { color: 'rgba(255,255,255,0.1)' },
-                    ticks: { color: '#888' }
-                },
-                y: {
-                    grid: { color: 'rgba(255,255,255,0.1)' },
-                    ticks: { color: '#888' }
-                }
-            }
+        const colors = {
+            clawdbot: '#1E90FF',
+            moltbot: '#FF6B6B',
+            moltbothub: '#4ECDC4',
+            moltbothq: '#A78BFA',
+            moltbotcommunity: '#FBBF24',
+            stars: '#2ECC71',
+            forks: '#9B59B6'
         };
         
-        function createChart(ctx, color) {
-            return new Chart(ctx, {
+        function initCharts() {
+            const commonOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { intersect: false, mode: 'index' },
+                plugins: {
+                    tooltip: { backgroundColor: 'rgba(0,0,0,0.8)' }
+                },
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: { unit: 'minute', displayFormats: { minute: 'HH:mm' } },
+                        grid: { color: 'rgba(255,255,255,0.1)' },
+                        ticks: { color: '#888' }
+                    },
+                    y: {
+                        grid: { color: 'rgba(255,255,255,0.1)' },
+                        ticks: { color: '#888' }
+                    }
+                }
+            };
+            
+            // Reddit Chart - multiple lines
+            redditChart = new Chart(document.getElementById('redditChart'), {
                 type: 'line',
                 data: {
-                    datasets: [{
-                        data: [],
-                        borderColor: color,
-                        backgroundColor: color + '33',
-                        fill: true,
-                        tension: 0.3,
-                        pointRadius: 4,
-                        pointHoverRadius: 6
-                    }]
+                    datasets: [
+                        { label: 'r/clawdbot', borderColor: colors.clawdbot, backgroundColor: colors.clawdbot + '33', fill: false, tension: 0.3, pointRadius: 3 },
+                        { label: 'r/moltbot', borderColor: colors.moltbot, backgroundColor: colors.moltbot + '33', fill: false, tension: 0.3, pointRadius: 3 },
+                        { label: 'r/MoltBotHub', borderColor: colors.moltbothub, backgroundColor: colors.moltbothub + '33', fill: false, tension: 0.3, pointRadius: 3 },
+                        { label: 'r/moltbotHQ', borderColor: colors.moltbothq, backgroundColor: colors.moltbothq + '33', fill: false, tension: 0.3, pointRadius: 3 },
+                        { label: 'r/MoltbotCommunity', borderColor: colors.moltbotcommunity, backgroundColor: colors.moltbotcommunity + '33', fill: false, tension: 0.3, pointRadius: 3 }
+                    ]
                 },
-                options: chartOptions
+                options: {
+                    ...commonOptions,
+                    plugins: {
+                        ...commonOptions.plugins,
+                        legend: { display: true, position: 'top', labels: { color: '#888', boxWidth: 12, padding: 10 } }
+                    }
+                }
+            });
+            
+            // GitHub Chart
+            githubChart = new Chart(document.getElementById('githubChart'), {
+                type: 'line',
+                data: {
+                    datasets: [
+                        { label: 'Stars', borderColor: colors.stars, backgroundColor: colors.stars + '33', fill: true, tension: 0.3, pointRadius: 3, yAxisID: 'y' },
+                        { label: 'Forks', borderColor: colors.forks, backgroundColor: colors.forks + '33', fill: false, tension: 0.3, pointRadius: 3, yAxisID: 'y1' }
+                    ]
+                },
+                options: {
+                    ...commonOptions,
+                    plugins: {
+                        ...commonOptions.plugins,
+                        legend: { display: true, position: 'top', labels: { color: '#888', boxWidth: 12, padding: 10 } }
+                    },
+                    scales: {
+                        ...commonOptions.scales,
+                        y: { ...commonOptions.scales.y, position: 'left' },
+                        y1: { ...commonOptions.scales.y, position: 'right', grid: { drawOnChartArea: false } }
+                    }
+                }
             });
         }
         
@@ -216,48 +278,72 @@
                 
                 // Update time
                 document.getElementById('updateTime').textContent = 
-                    `Last updated: ${summary.timestamp_local} | ${summary.data_points} data points`;
+                    `Last updated: ${summary.timestamp_local} | ${history.length} data points`;
+                
+                const first = history[0] || {};
+                const latest = history[history.length - 1] || {};
                 
                 // Summary cards
                 document.getElementById('redditTotal').textContent = summary.reddit.total.toLocaleString();
-                document.getElementById('redditDelta').textContent = `+${summary.reddit.delta.toLocaleString()} since start`;
+                document.getElementById('redditDelta').textContent = `+${summary.reddit.delta.toLocaleString()}`;
+                
+                document.getElementById('clawdbot').textContent = (latest.reddit_clawdbot || 0).toLocaleString();
+                document.getElementById('clawdbotDelta').textContent = `+${((latest.reddit_clawdbot || 0) - (first.reddit_clawdbot || 0)).toLocaleString()}`;
+                
+                document.getElementById('moltbot').textContent = (latest.reddit_moltbot || 0).toLocaleString();
+                document.getElementById('moltbotDelta').textContent = `+${((latest.reddit_moltbot || 0) - (first.reddit_moltbot || 0)).toLocaleString()}`;
                 
                 document.getElementById('githubStars').textContent = summary.github.stars.toLocaleString();
-                document.getElementById('starsDelta').textContent = `+${summary.github.stars_delta.toLocaleString()} since start`;
+                document.getElementById('starsDelta').textContent = `+${summary.github.stars_delta.toLocaleString()}`;
                 
                 document.getElementById('githubForks').textContent = summary.github.forks.toLocaleString();
-                document.getElementById('forksDelta').textContent = `+${summary.github.forks_delta.toLocaleString()} since start`;
+                document.getElementById('forksDelta').textContent = `+${summary.github.forks_delta.toLocaleString()}`;
                 
                 document.getElementById('rpiStock').textContent = summary.hardware.rpi_total;
-                document.getElementById('rpiDetail').textContent = 
-                    `Pi5: ${summary.hardware.rpi_pi5} | Pi4: ${summary.hardware.rpi_pi4}`;
+                document.getElementById('rpiDetail').textContent = `Pi5:${summary.hardware.rpi_pi5} Pi4:${summary.hardware.rpi_pi4}`;
                 
-                // Charts
-                const redditData = history.map(d => ({ x: new Date(d.timestamp), y: d.reddit_total }));
-                const starsData = history.map(d => ({ x: new Date(d.timestamp), y: d.github_stars }));
-                
-                redditChart.data.datasets[0].data = redditData;
+                // Update Reddit chart
+                redditChart.data.datasets[0].data = history.map(d => ({ x: new Date(d.timestamp), y: d.reddit_clawdbot || 0 }));
+                redditChart.data.datasets[1].data = history.map(d => ({ x: new Date(d.timestamp), y: d.reddit_moltbot || 0 }));
+                redditChart.data.datasets[2].data = history.map(d => ({ x: new Date(d.timestamp), y: d.reddit_moltbothub || 0 }));
+                redditChart.data.datasets[3].data = history.map(d => ({ x: new Date(d.timestamp), y: d.reddit_moltbothq || 0 }));
+                redditChart.data.datasets[4].data = history.map(d => ({ x: new Date(d.timestamp), y: d.reddit_moltbotcommunity || 0 }));
                 redditChart.update('none');
                 
-                starsChart.data.datasets[0].data = starsData;
-                starsChart.update('none');
+                // Update GitHub chart
+                githubChart.data.datasets[0].data = history.map(d => ({ x: new Date(d.timestamp), y: d.github_stars }));
+                githubChart.data.datasets[1].data = history.map(d => ({ x: new Date(d.timestamp), y: d.github_forks }));
+                githubChart.update('none');
                 
-                // History table
-                const tbody = document.querySelector('#historyTable tbody');
-                tbody.innerHTML = '';
+                // Reddit table
+                const redditTbody = document.querySelector('#redditTable tbody');
+                redditTbody.innerHTML = '';
+                for (let i = history.length - 1; i >= 0; i--) {
+                    const d = history[i];
+                    redditTbody.innerHTML += `
+                        <tr>
+                            <td>${d.time_local}</td>
+                            <td>${d.reddit_total.toLocaleString()}</td>
+                            <td>${(d.reddit_clawdbot || 0).toLocaleString()}</td>
+                            <td>${(d.reddit_moltbot || 0).toLocaleString()}</td>
+                            <td>${(d.reddit_moltbothub || 0).toLocaleString()}</td>
+                            <td>${(d.reddit_moltbothq || 0).toLocaleString()}</td>
+                            <td>${(d.reddit_moltbotcommunity || 0).toLocaleString()}</td>
+                        </tr>
+                    `;
+                }
                 
+                // GitHub table
+                const githubTbody = document.querySelector('#githubTable tbody');
+                githubTbody.innerHTML = '';
                 for (let i = history.length - 1; i >= 0; i--) {
                     const d = history[i];
                     const prev = history[i - 1];
-                    
-                    const redditDelta = prev ? d.reddit_total - prev.reddit_total : 0;
                     const starsDelta = prev ? d.github_stars - prev.github_stars : 0;
                     
-                    tbody.innerHTML += `
+                    githubTbody.innerHTML += `
                         <tr>
-                            <td>${d.time_local || d.timestamp}</td>
-                            <td>${d.reddit_total.toLocaleString()}</td>
-                            <td class="${redditDelta >= 0 ? 'positive' : 'negative'}">${redditDelta > 0 ? '+' : ''}${redditDelta}</td>
+                            <td>${d.time_local}</td>
                             <td>${d.github_stars.toLocaleString()}</td>
                             <td class="${starsDelta >= 0 ? 'positive' : 'negative'}">${starsDelta > 0 ? '+' : ''}${starsDelta}</td>
                             <td>${d.github_forks.toLocaleString()}</td>
@@ -272,10 +358,7 @@
             }
         }
         
-        // Initialize
-        redditChart = createChart(document.getElementById('redditChart'), '#1E90FF');
-        starsChart = createChart(document.getElementById('starsChart'), '#2ECC71');
-        
+        initCharts();
         loadData();
         setInterval(loadData, 60000);
     </script>
