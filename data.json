@@ -1,46 +1,77 @@
 {
-  "timestamp": "2026-01-29T03:41:10Z",
-  "timestamp_local": "2026-01-29 11:41:10",
-  "data_points": 11,
+  "timestamp": "2026-01-29T05:49:25Z",
+  "timestamp_local": "2026-01-29 13:49:25",
+  "data_points": 12,
   "reddit": {
-    "total": 3219,
-    "delta": 234,
+    "total_subscribers": 3293,
+    "delta_subscribers": 308,
+    "total_active": 0,
+    "total_posts_24h": 72,
+    "total_comments": 448,
+    "total_upvotes": 167,
     "subreddits": [
       {
         "name": "r/clawdbot",
-        "count": 2484
+        "key": "clawdbot",
+        "subscribers": 2516,
+        "active": 0,
+        "posts_24h": 36,
+        "comments": 377,
+        "avg_score": 2,
+        "total_upvotes": 73,
+        "top_score": 16
       },
       {
         "name": "r/moltbot",
-        "count": 433
+        "key": "moltbot",
+        "subscribers": 462,
+        "active": 0,
+        "posts_24h": 27,
+        "comments": 49,
+        "avg_score": 1,
+        "total_upvotes": 32,
+        "top_score": 3
       },
       {
-        "name": "r/MoltBotHub",
-        "count": 52
+        "name": "r/moltbothub",
+        "key": "moltbothub",
+        "subscribers": 56,
+        "active": 0,
+        "posts_24h": 4,
+        "comments": 5,
+        "avg_score": 1,
+        "total_upvotes": 12,
+        "top_score": 3
       },
       {
-        "name": "r/moltbotHQ",
-        "count": 31
+        "name": "r/moltbothq",
+        "key": "moltbothq",
+        "subscribers": 31,
+        "active": 0,
+        "posts_24h": 0,
+        "comments": 1,
+        "avg_score": 2,
+        "total_upvotes": 4,
+        "top_score": 3
       },
       {
-        "name": "r/MoltbotCommunity",
-        "count": 219
+        "name": "r/moltbotcommunity",
+        "key": "moltbotcommunity",
+        "subscribers": 228,
+        "active": 0,
+        "posts_24h": 5,
+        "comments": 16,
+        "avg_score": 3,
+        "total_upvotes": 46,
+        "top_score": 9
       }
-    ],
-    "new_posts_24h": 26
+    ]
   },
   "github": {
-    "stars": 91385,
-    "stars_delta": 311,
-    "forks": 12499,
-    "forks_delta": 54,
-    "open_issues": 1100
-  },
-  "hardware": {
-    "rpi_total": 40,
-    "rpi_pi5": 17,
-    "rpi_pi4": 2,
-    "rpi_zero": 1,
-    "mac_mini": "available"
+    "stars": 92889,
+    "stars_delta": 1815,
+    "forks": 12726,
+    "forks_delta": 281,
+    "open_issues": 1137
   }
 }
