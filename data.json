@@ -1,25 +1,25 @@
 {
-  "timestamp": "2026-02-10T08:10:12Z",
-  "timestamp_local": "2026-02-10 16:10:12",
+  "timestamp": "2026-02-10T08:20:14Z",
+  "timestamp_local": "2026-02-10 16:20:14",
   "data_points": 1001,
   "reddit": {
-    "total_subscribers": 23987,
-    "delta_subscribers": 10,
+    "total_subscribers": 23995,
+    "delta_subscribers": 8,
     "total_active": 0,
-    "total_posts_24h": 91,
-    "total_comments": 375,
-    "total_upvotes": 438,
+    "total_posts_24h": 90,
+    "total_comments": 376,
+    "total_upvotes": 442,
     "subreddits": [
       {
         "name": "r/clawdbot",
         "key": "clawdbot",
-        "subscribers": 17450,
+        "subscribers": 17458,
         "active": 0,
-        "posts_24h": 75,
-        "comments": 334,
-        "avg_score": 5,
-        "total_upvotes": 404,
-        "top_score": 87
+        "posts_24h": 74,
+        "comments": 335,
+        "avg_score": 6,
+        "total_upvotes": 410,
+        "top_score": 91
       },
       {
         "name": "r/moltbot",
@@ -29,7 +29,7 @@
         "posts_24h": 15,
         "comments": 41,
         "avg_score": 2,
-        "total_upvotes": 33,
+        "total_upvotes": 31,
         "top_score": 10
       },
       {
@@ -68,10 +68,10 @@
     ]
   },
   "github": {
-    "stars": 65710,
-    "stars_delta": 3,
+    "stars": 65711,
+    "stars_delta": 1,
     "forks": 5038,
     "forks_delta": 0,
-    "open_issues": 6591
+    "open_issues": 6592
   }
 }
