@@ -1,77 +1,44 @@
 {
-  "timestamp": "2026-02-12T17:30:13Z",
-  "timestamp_local": "2026-02-13 01:30:13",
+  "timestamp": "2026-02-12T17:40:29Z",
+  "timestamp_local": "2026-02-13 01:40:29",
   "data_points": 1001,
   "reddit": {
-    "total_subscribers": 26693,
-    "delta_subscribers": 6124,
+    "total_subscribers": 25808,
+    "delta_subscribers": -885,
     "total_active": 0,
-    "total_posts_24h": 63,
-    "total_comments": 310,
-    "total_upvotes": 352,
+    "total_posts_24h": 65,
+    "total_comments": 313,
+    "total_upvotes": 362,
     "subreddits": [
       {
         "name": "r/clawdbot",
         "key": "clawdbot",
-        "subscribers": 19679,
+        "subscribers": 19685,
         "active": 0,
-        "posts_24h": 54,
-        "comments": 288,
+        "posts_24h": 56,
+        "comments": 291,
         "avg_score": 6,
-        "total_upvotes": 326,
-        "top_score": 124
+        "total_upvotes": 335,
+        "top_score": 125
       },
       {
         "name": "r/moltbot",
         "key": "moltbot",
-        "subscribers": 6120,
+        "subscribers": 6123,
         "active": 0,
         "posts_24h": 9,
         "comments": 22,
         "avg_score": 3,
-        "total_upvotes": 26,
-        "top_score": 13
-      },
-      {
-        "name": "r/moltbothub",
-        "key": "moltbothub",
-        "subscribers": 112,
-        "active": 0,
-        "posts_24h": 0,
-        "comments": 0,
-        "avg_score": 0,
-        "total_upvotes": 0,
-        "top_score": 0
-      },
-      {
-        "name": "r/moltbothq",
-        "key": "moltbothq",
-        "subscribers": 81,
-        "active": 0,
-        "posts_24h": 0,
-        "comments": 0,
-        "avg_score": 0,
-        "total_upvotes": 0,
-        "top_score": 0
-      },
-      {
-        "name": "r/moltbotcommunity",
-        "key": "moltbotcommunity",
-        "subscribers": 701,
-        "active": 0,
-        "posts_24h": 0,
-        "comments": 0,
-        "avg_score": 0,
-        "total_upvotes": 0,
-        "top_score": 0
+        "total_upvotes": 27,
+        "top_score": 14
       }
     ]
   },
   "github": {
     "stars": 66405,
-    "stars_delta": 4,
+    "stars_delta": 0,
     "forks": 5116,
     "forks_delta": 0,
-    "open_issues": 6713
+    "open_issues": 6715
   }
 }
